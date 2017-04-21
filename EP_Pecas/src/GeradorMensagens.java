@@ -26,7 +26,12 @@ public class GeradorMensagens
 	
 	public void ComandoNaoReconhecido()
 	{
-		System.out.println("O comando informado não foi aceito pelo sistema.");
+		System.err.println("O comando informado não foi aceito pelo sistema.");
+	}
+	
+	public void MensagemDeErro(String mensagem)
+	{
+        System.err.println(mensagem);
 	}
 	
 	public void EncerrarAplicacao()

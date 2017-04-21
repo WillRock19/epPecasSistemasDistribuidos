@@ -7,9 +7,12 @@ public class Cliente
 {
 	private String repositorioAtual;
 	private Part pecaAtual;
+	private String hostRmiRegistry;
+	
+	private static Registry RmiRegistry;
 	private static boolean executarPrograma;
 	private static GeradorMensagens mensagens;
-	private static Comandos comandos;
+	
 	
 	public Cliente()
 	{
@@ -19,7 +22,7 @@ public class Cliente
 	
 	public static void main(String[] args) 
 	{
-		IniciarPrograma();
+		IniciarPrograma(args);
 		
 		while(executarPrograma)
 		{
@@ -28,7 +31,7 @@ public class Cliente
 			
 			if(comandoComParametro.length <= 2)
 			{
-				ExecutarComandoDoUsuario(comandoComParametro);
+				ExecutarComandoUsuario(comandoComParametro);
 			}
 			else
 				mensagens.ComandoContemParametrosDemais();
@@ -36,10 +39,12 @@ public class Cliente
 		mensagens.EncerrarAplicacao();
 	}
 	
-	private static void IniciarPrograma()
+	private static void IniciarPrograma(String[] argumentos)
 	{
 		executarPrograma = true;
 		mensagens = new GeradorMensagens();
+		
+		AcessarRmiRegistry(argumentos[0]);
 		
 		mensagens.IniciarAplicacao();
 		mensagens.ExibirListaDeComandos();
@@ -56,7 +61,7 @@ public class Cliente
 		return comando;
 	}
 	
-	private static void ExecutarComandoDoUsuario(String[] comandoEParametro)
+	private static void ExecutarComandoUsuario(String[] comandoEParametro)
 	{
 		String comando = comandoEParametro[0];
 		String parametro = comandoEParametro[1];
@@ -91,6 +96,27 @@ public class Cliente
 			default:
 				mensagens.ComandoNaoReconhecido();
 				break;
+		}
+	}
+	
+	private static void AcessarRmiRegistry(String endereco)
+	{
+		try{
+			RmiRegistry = LocateRegistry.getRegistry(endereco);	
+		}
+		catch(Exception e) {
+            mensagens.MensagemDeErro("Não foi possível se concetar ao RMI Registry especificado. O seguinte erro ocorreu: " + e.getMessage());
+		}
+	}
+	
+	private String[] ListaRepositorios()
+	{
+		try{
+			return RmiRegistry.list();	
+		}
+		catch(Exception e){
+			mensagens.MensagemDeErro("Não foi possível encontrar uma lista de Registros no RMI Registry.");
+			return null;
 		}
 	}
 }
