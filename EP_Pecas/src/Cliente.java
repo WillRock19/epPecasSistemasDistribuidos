@@ -43,8 +43,8 @@ public class Cliente
 	{
 		executarPrograma = true;
 		mensagens = new GeradorMensagens();
-		
-		AcessarRmiRegistry(argumentos[0]);
+				
+		AcessarRmiRegistry(null);
 		
 		mensagens.IniciarAplicacao();
 		mensagens.ExibirListaDeComandos();
@@ -56,8 +56,6 @@ public class Cliente
 		mensagens.RequisitarComandoAoUsuario();
 		
 		String comando = sc.nextLine();
-		sc.close();
-		
 		return comando.split(" ");
 	}
 	
@@ -105,8 +103,10 @@ public class Cliente
 	
 	private static void AcessarRmiRegistry(String endereco)
 	{
+		//TODO: Dar um jeito de executar o endereço se ele for nulo
+		
 		try{
-			RmiRegistry = LocateRegistry.getRegistry(endereco);	
+			RmiRegistry = LocateRegistry.getRegistry();	
 		}
 		catch(Exception e) {
             mensagens.MensagemDeErro("Não foi possível se concetar ao RMI Registry especificado. O seguinte erro ocorreu: " + e.getMessage());
