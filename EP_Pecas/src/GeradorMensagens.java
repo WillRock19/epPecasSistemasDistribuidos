@@ -17,16 +17,16 @@ public class GeradorMensagens
 		System.out.println("Bem-vindo à aplicação de Peças!");
 	}
 	
+	public void RepositorioVinculado()
+	{
+		System.out.println("Repositório vinculado com sucesso!");
+	}
+	
 	public void ExibirListaDeComandos()
 	{
 		System.out.println("Os comandos aceitos sao:");
 		
 		//TO DO: imprimir lista com todos os comandos (usar enum), explicando o que cad aum eh
-	}
-	
-	public void ComandoNaoReconhecido()
-	{
-		System.err.println("O comando informado não foi aceito pelo sistema.");
 	}
 	
 	public void MensagemDeErro(String mensagem)

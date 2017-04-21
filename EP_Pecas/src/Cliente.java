@@ -5,10 +5,11 @@ import java.util.Scanner;
 
 public class Cliente 
 {
-	private String repositorioAtual;
+
 	private Part pecaAtual;
 	private String hostRmiRegistry;
 	
+	private static PartRepository repositorioAtual;
 	private static Registry RmiRegistry;
 	private static boolean executarPrograma;
 	private static GeradorMensagens mensagens;
@@ -26,12 +27,11 @@ public class Cliente
 		
 		while(executarPrograma)
 		{
-			String comando = CapturarComandoUsuario();
-			String[] comandoComParametro = comando.split(" ");
-			
-			if(comandoComParametro.length <= 2)
+			String[] comando = CapturarComandoUsuario();
+				
+			if(comando.length <= 2)
 			{
-				ExecutarComandoUsuario(comandoComParametro);
+				ExecutarComandoUsuario(comando);
 			}
 			else
 				mensagens.ComandoContemParametrosDemais();
@@ -50,7 +50,7 @@ public class Cliente
 		mensagens.ExibirListaDeComandos();
 	}
 		
-	private static String CapturarComandoUsuario()
+	private static String[] CapturarComandoUsuario()
 	{
 		Scanner sc = new Scanner(System.in);
 		mensagens.RequisitarComandoAoUsuario();
@@ -58,7 +58,7 @@ public class Cliente
 		String comando = sc.nextLine();
 		sc.close();
 		
-		return comando;
+		return comando.split(" ");
 	}
 	
 	private static void ExecutarComandoUsuario(String[] comandoEParametro)
@@ -68,6 +68,10 @@ public class Cliente
 		
 		switch(comando)
 		{
+			case Comandos.VincularAoRepositorio:
+				VincularAoRepositorio(parametro);
+				break;
+		
 			case Comandos.ListarPeca:
 				
 				break;
@@ -94,7 +98,7 @@ public class Cliente
 				break;
 
 			default:
-				mensagens.ComandoNaoReconhecido();
+				mensagens.MensagemDeErro("O comando informado não foi aceito pelo sistema.");
 				break;
 		}
 	}
@@ -117,6 +121,17 @@ public class Cliente
 		catch(Exception e){
 			mensagens.MensagemDeErro("Não foi possível encontrar uma lista de Registros no RMI Registry.");
 			return null;
+		}
+	}
+	
+	private static void VincularAoRepositorio(String nomeRepositorio)
+	{
+		try{
+			repositorioAtual = (PartRepository) RmiRegistry.lookup(nomeRepositorio);
+			mensagens.RepositorioVinculado();
+		}
+		catch(Exception e){
+			mensagens.MensagemDeErro("Não foi possível vincular ao repositório desejado.");
 		}
 	}
 }

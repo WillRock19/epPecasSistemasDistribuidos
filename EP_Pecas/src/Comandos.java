@@ -1,6 +1,7 @@
 
 final class Comandos 
 {
+	public static final String VincularAoRepositorio = "bind";
 	public static final String ListarPeca = "listpart";
 	public static final String RecuperarPeca = "getpart";
 	public static final String MostrarPeca = "showpart";
