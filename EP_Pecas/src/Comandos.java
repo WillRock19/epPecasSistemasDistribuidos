@@ -1,28 +1,11 @@
 
-public enum Comandos 
+final class Comandos 
 {
-	LISTARPECA("listpart"), 
-	RECUPERARPECA("getpart"), 
-	MOSTRARPECA("showpart"), 
-	LIMPARLISTA("clearlist"), 
-	ADDSUBPECA("addsubpart"),
-	ADDPECA("addpart"),
-	ENCERRAR("quit");
-	
-	private final String valor;
-	
-	Comandos(String valorComando)
-	{
-		valor = valorComando;
-	}
-	
-	public String getValor()
-	{
-		return valor;
-	}
-	
-	public boolean Equals(String comando)
-	{
-		return valor.equals(comando.toLowerCase());
-	}
+	public static final String ListarPeca = "listpart";
+	public static final String RecuperarPeca = "getpart";
+	public static final String MostrarPeca = "showpart";
+	public static final String LimparLista = "clearlist";
+	public static final String AddSubPeca = "addsubpart";
+	public static final String AddPeca = "addpart";
+	public static final String Encerrar = "quit";
 }

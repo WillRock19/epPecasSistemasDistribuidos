@@ -9,6 +9,7 @@ public class Cliente
 	private Part pecaAtual;
 	private static boolean executarPrograma;
 	private static GeradorMensagens mensagens;
+	private static Comandos comandos;
 	
 	public Cliente()
 	{
@@ -27,12 +28,7 @@ public class Cliente
 			
 			if(comandoComParametro.length <= 2)
 			{
-				if(!Comandos.ENCERRAR.Equals(comandoComParametro[0]))
-				{
-					ExecutarComandoDoUsuario(comandoComParametro);
-				}
-				else
-					executarPrograma = false;
+				ExecutarComandoDoUsuario(comandoComParametro);
 			}
 			else
 				mensagens.ComandoContemParametrosDemais();
@@ -62,6 +58,39 @@ public class Cliente
 	
 	private static void ExecutarComandoDoUsuario(String[] comandoEParametro)
 	{
+		String comando = comandoEParametro[0];
+		String parametro = comandoEParametro[1];
 		
+		switch(comando)
+		{
+			case Comandos.ListarPeca:
+				
+				break;
+				
+			case Comandos.RecuperarPeca:
+				
+				break;
+			
+			case Comandos.MostrarPeca:
+	
+				break;
+			case Comandos.LimparLista:
+	
+				break;
+			case Comandos.AddSubPeca:
+	
+				break;
+			case Comandos.AddPeca:
+	
+				break;
+				
+			case Comandos.Encerrar:
+				executarPrograma = false;
+				break;
+
+			default:
+				mensagens.ComandoNaoReconhecido();
+				break;
+		}
 	}
 }

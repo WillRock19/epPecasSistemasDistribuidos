@@ -24,6 +24,11 @@ public class GeradorMensagens
 		//TO DO: imprimir lista com todos os comandos (usar enum), explicando o que cad aum eh
 	}
 	
+	public void ComandoNaoReconhecido()
+	{
+		System.out.println("O comando informado não foi aceito pelo sistema.");
+	}
+	
 	public void EncerrarAplicacao()
 	{
 		try
