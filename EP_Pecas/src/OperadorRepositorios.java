@@ -1,17 +1,19 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.List;
+import java.util.*;
 
 public class OperadorRepositorios 
 {
 	private Part pecaAtual;
+	private List<Subcomponente> subcomponentesAtuais;
 	private PartRepository repositorioAtual;
 	private Registry RmiRegistry;
 	private GeradorMensagens mensagens;
 	
 	public OperadorRepositorios()
 	{
-		mensagens = new GeradorMensagens();	
+		mensagens = new GeradorMensagens();
+		subcomponentesAtuais = new LinkedList<Subcomponente>();
 	}
 	
 	public void ExecutarOperacoes(String[] comandoEParametro)
@@ -37,16 +39,19 @@ public class OperadorRepositorios
                 case Comandos.MostrarPeca:
                     MostrarPecaAtual();
                     break;
+                
                 case Comandos.LimparLista:
                     LimparListaDeSubcomponentes();
                     break;
-                case Comandos.AddSubPeca:
-
-                    break;
+                
                 case Comandos.AddPeca:
-
+            		AdicionarPecaAoRepositorio();
                     break;
-
+                    
+                case Comandos.AddSubPeca:
+            		AdicionarPecaAtualComoSubcomponenteAtual();
+                    break;
+                    
                 default:
                     mensagens.Erro("O comando informado não foi aceito pelo sistema.");
                     break;
@@ -132,7 +137,57 @@ public class OperadorRepositorios
 			mensagens.Erro("Não é possível limpar a lista de subcomponentes; não há nenhuma peça definida como 'Peça corrente'.");
 		else
 		{
+			pecaAtual.LimparSubcomponentes();
+			mensagens.MensagemSimples("A lista de subcomponentes da Peça " + pecaAtual.getNome() + " foi limpa com sucesso!");
+		}
+	}
+	
+	private void AdicionarPecaAoRepositorio()
+	{
+		try
+		{
+			Part novaPeca = ReceberInformacoesECriarNovaPeca();
+			novaPeca.setSubcomponentes(subcomponentesAtuais);
 			
+			repositorioAtual.adicionarAoRepositorio(novaPeca);
+			mensagens.MensagemSimples("A Peça adicionada ao repostorio atual com sucesso!");
+		}
+		catch(Exception e){
+			mensagens.OperacaoNaoPodeSerRealizada();
+		}
+	}
+	
+	private Part ReceberInformacoesECriarNovaPeca()
+	{
+		Scanner sc = new Scanner(System.in);			
+		mensagens.MensagemSimples("Para adicionar uma Peça ao repositório atual, informe os dados: ");
+
+		mensagens.MensagemSimples("Codigo da Peça: ");
+		String codigo = sc.next();
+		
+		mensagens.MensagemSimples("Nome da Peça: ");
+		String nome = sc.next();
+		
+		mensagens.MensagemSimples("Descrição da Peça: ");
+		String descricao = sc.next();
+		
+		return new Part(nome, codigo, descricao);
+	}
+	
+	private void AdicionarPecaAtualComoSubcomponenteAtual()
+	{
+		try
+		{
+			Scanner sc = new Scanner(System.in);
+			mensagens.MensagemSimples("Informe a quantidade de subcomponentes a serem adicionados: ");
+			int quantidade = sc.nextInt();
+			
+			this.subcomponentesAtuais.add(new Subcomponente(pecaAtual, quantidade));
+			
+			mensagens.MensagemSimples("A 'Peça atual' foi adicionada à lista de 'Subcomponentes atuais' com sucesso!");
+		}
+		catch(Exception e){
+			mensagens.OperacaoNaoPodeSerRealizada();
 		}
 	}
 }
