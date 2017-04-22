@@ -6,7 +6,7 @@ public class GeradorMensagens
 {
 	public GeradorMensagens() { }
 	
-	public void MensagemDeErro(String mensagem)
+	public void Erro(String mensagem)
 	{
         System.err.println(mensagem);
 	}
@@ -87,7 +87,7 @@ public class GeradorMensagens
 			TimeUnit.SECONDS.sleep(3);
 		}
 		catch(Exception e){
-			MensagemDeErro("Uma exceção não tratada ocorreu. A exceção é: " + e.getMessage());
+			Erro("Uma exceção não tratada ocorreu. A exceção é: " + e.getMessage());
 		}
 	}
 	
@@ -96,5 +96,10 @@ public class GeradorMensagens
 		MensagemSimples("O comando inserido contém parâmetros a mais do que é permitido.");
 		MensagemSimples("Favor, insira um comando com até UM parâmetro.");
 		MensagemSimples("\r");
+	}
+	
+	public void OperacaoNaoPodeSerRealizada()
+	{
+		Erro("A operacao requisitada nao pode ser executada.");
 	}
 }

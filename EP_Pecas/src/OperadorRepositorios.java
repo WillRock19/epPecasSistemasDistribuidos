@@ -29,16 +29,18 @@ public class OperadorRepositorios
 				ListarPecasRepositorio();
 				break;
 				
-			case Comandos.RecuperarPeca:
-				
+			case Comandos.RecuperarPecaPorCodigo:
+				RecuperarPecaPorCodigo(parametro);
 				break;
 			
 			case Comandos.MostrarPeca:
-	
+				MostrarPecaAtual();
 				break;
+				
 			case Comandos.LimparLista:
-	
+				LimparListaDeSubcomponentes();
 				break;
+				
 			case Comandos.AddSubPeca:
 	
 				break;
@@ -47,7 +49,7 @@ public class OperadorRepositorios
 				break;
 				
 			default:
-				mensagens.MensagemDeErro("O comando informado não foi aceito pelo sistema.");
+				mensagens.Erro("O comando informado não foi aceito pelo sistema.");
 				break;
 		}
 	}
@@ -58,7 +60,7 @@ public class OperadorRepositorios
 			RmiRegistry = LocateRegistry.getRegistry(host);	
 		}
 		catch(Exception e) {
-            mensagens.MensagemDeErro("Não foi possível se concetar ao RMI Registry especificado. O seguinte erro ocorreu: " + e.getMessage());
+            mensagens.Erro("Não foi possível se concetar ao RMI Registry especificado. O seguinte erro ocorreu: " + e.getMessage());
 		}
 	}
 	
@@ -68,7 +70,7 @@ public class OperadorRepositorios
 			return RmiRegistry.list();	
 		}
 		catch(Exception e){
-			mensagens.MensagemDeErro("Não foi possível encontrar uma lista de Registros no RMI Registry.");
+			mensagens.OperacaoNaoPodeSerRealizada();
 			return null;
 		}
 	}
@@ -80,19 +82,59 @@ public class OperadorRepositorios
 			mensagens.MensagemSimples("Repositório vinculado com sucesso!");
 		}
 		catch(Exception e){
-			mensagens.MensagemDeErro("Não foi possível vincular ao repositório desejado.");
+			mensagens.OperacaoNaoPodeSerRealizada();
 		}
 	}
 	
 	private void ListarPecasRepositorio()
 	{
-		try
-		{
+		try{
             List<Part> response = repositorioAtual.recuperarTodasPecas();
-			mensagens.ExibirPecasRepositorio(response);
+            
+            if(response.isEmpty())
+            	mensagens.MensagemSimples("Não existem peças no repositório atual.");
+            else
+            	mensagens.ExibirPecasRepositorio(response);
 		}
 		catch(Exception e){
-			mensagens.MensagemDeErro("Não foi possível listar as Pecas do repositorio.");
+			mensagens.OperacaoNaoPodeSerRealizada();
+		}
+	}
+	
+	private void RecuperarPecaPorCodigo(String codigo)
+	{
+		try{
+            Part response = repositorioAtual.buscarPecaPorCodigo(Integer.parseInt(codigo));
+			
+            if(response != null)
+            {
+            	pecaAtual = response;
+            	mensagens.MensagemSimples("A Peça de código" + codigo + " foi encontrada e definida como Peça corrente.");
+            }
+            else
+            	mensagens.MensagemSimples("Nao existe uma peça com o código informado.");
+            
+		}
+		catch(Exception e){
+			mensagens.OperacaoNaoPodeSerRealizada();
+		}
+	}
+	
+	private void MostrarPecaAtual()
+	{
+		if(pecaAtual != null)
+			mensagens.ExibirPecaNoNivel(pecaAtual, 1);
+		else
+			mensagens.Erro("Não existe uma peça atual definida neste repositório.");
+	}
+	
+	private void LimparListaDeSubcomponentes()
+	{
+		if(pecaAtual == null)
+			mensagens.Erro("Não é possível limpar a lista de subcomponentes; não há nenhuma peça definida como 'Peça corrente'.");
+		else
+		{
+			
 		}
 	}
 }
