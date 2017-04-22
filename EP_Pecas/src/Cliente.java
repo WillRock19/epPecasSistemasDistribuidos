@@ -10,7 +10,7 @@ public class Cliente
 	
 	public static void main(String[] args) 
 	{
-		DefinirHostRmiRegistry(args);
+		hostRmiRegistry = (args.length < 1) ? null : args[0];
 		IniciarPrograma();
 		
 		while(executarPrograma)
@@ -50,11 +50,5 @@ public class Cliente
 		
 		String comando = sc.nextLine();
 		return comando.split(" ");
-	}
-	
-	private static void DefinirHostRmiRegistry(String[] args)
-	{
-		if(args.length > 0)
-			hostRmiRegistry = args[0];
 	}
 }

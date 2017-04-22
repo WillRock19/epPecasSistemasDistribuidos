@@ -35,14 +35,24 @@ public class GeradorMensagens
 	public void ExibirComandos()
 	{
 		MensagemSimples("Os seguintes comandos sao validos: \r");
+		MensagemSimples("	bind  [RepositoryName] : Conecta com o reposítorio especificado\r");
+		MensagemSimples("	listp                  : Lista todas as peças do repositório atual\r");
 		
 		//TO DO: imprimir lista com todos os comandos (usar enum), explicando o que cad aum eh
 	}
 	
 	public void ExibirRepositoriosExistentes(String host, String[] repositorios)
 	{
-		MensagemSimples("O host '" + host + "' possui os seguintes repositórios: \r");
-		
+		if (host == null) {
+			MensagemSimples("Os seguintes repositórios estão disponíveis: \r");
+		} else {
+			MensagemSimples("O host '" + host + "' possui os seguintes repositórios: \r");
+		}
+
+		if (repositorios.length == 0) {
+			MensagemSimples("---- Não existe repositórios para o host solicitado ----");
+		}
+
 		for(String repositorio : repositorios)
 		{
 			MensagemSimples("** " + repositorio);
@@ -52,7 +62,11 @@ public class GeradorMensagens
 	
 	public void ExibirPecasRepositorio(List<Part> pecas)
 	{
-		MensagemSimples("O repositorio possui as seguintes Pecas: \r");
+		if (pecas == null) {
+			MensagemSimples("---- Não existe peças para o repositório solicitado ---- \r");
+		} else {
+			MensagemSimples("O repositorio possui as seguintes Pecas: \r");
+		}
 		
 		for(Part peca : pecas)
 		{
@@ -64,13 +78,13 @@ public class GeradorMensagens
 	public void ExibirPecaNoNivel(Part peca, int nivel)
 	{
 		String marker = String.join("", Collections.nCopies(nivel, "*"));
-		MensagemSimples(marker  + "Codigo: " + peca.codigo);
-		MensagemSimples(marker  + "Nome: " + peca.nome);
-		MensagemSimples(marker  + "Descricao: " + peca.descricao);
+		MensagemSimples(marker  + "Codigo: " + peca.getCodigo());
+		MensagemSimples(marker  + "Nome: " + peca.getNome());
+		MensagemSimples(marker  + "Descricao: " + peca.getDescricao());
 		
-		if(!peca.subcomponentes.isEmpty())
+		if(peca.PecaEhAgregada())
 		{
-			for(Subcomponente subcomponente : peca.subcomponentes)
+			for(Subcomponente subcomponente : peca.getSubcomponentes())
 			{
 				MensagemSimples(marker  + "Quantidade Subcomponentes: " + subcomponente.quantidadeSubpartes);
 				MensagemSimples(marker  + "Dados do Subcomponente: ");

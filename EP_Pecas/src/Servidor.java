@@ -19,9 +19,7 @@ public class Servidor implements PartRepository
 			
             // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();
-            
             registry.bind("PartRepository", stub);
-
 		
             System.out.println("Server ready");
         } 
@@ -32,25 +30,27 @@ public class Servidor implements PartRepository
          }
 	}
 
-	public List<Part> recuperarTodasPecas() 
+	private List<Part> partes = null;
+
+	public List<Part> recuperarTodasPecas()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Part buscarPecaPorCodigo(long codigoPeca) 
+	public Part buscarPecaPorCodigo(long codigoPeca)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public boolean adicionarAoRepositorio(Part peca) 
+	public boolean adicionarAoRepositorio(Part peca)
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public String nomeDoRepositorio() 
+	public String nomeDoRepositorio()
 	{
 		// TODO Auto-generated method stub
 		return null;
