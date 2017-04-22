@@ -1,5 +1,6 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.Remote;
 import java.util.List;
 
 public class OperadorRepositorios 
@@ -79,9 +80,15 @@ public class OperadorRepositorios
 			mensagens.Erro("Você precisa informar o nome do repositório desejado.");
 		} else {
 			try {
-				repositorioAtual = (PartRepository) RmiRegistry.lookup(nomeRepositorio);
+			    Remote remoteAux = RmiRegistry.lookup(nomeRepositorio);
+                RmiRegistry.rebind(nomeRepositorio, remoteAux);
+                repositorioAtual = (PartRepository) remoteAux;
+
+//			    repositorioAtual = (PartRepository) RmiRegistry.lookup(nomeRepositorio);
 				mensagens.MensagemSimples("Repositório vinculado com sucesso!");
 			} catch(Exception e) {
+                e.printStackTrace();
+//			    mensagens.Erro();
                 mensagens.OperacaoNaoPodeSerRealizada();
 			}
 		}

@@ -1,3 +1,4 @@
+import java.rmi.Naming;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.rmi.registry.Registry;
@@ -7,14 +8,41 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class Servidor implements PartRepository
 {
-	public Servidor(){}
+	public Servidor() throws RemoteException {
+	    super();
+    }
+
+    private List<Part> partes = null;
+
+    public List<Part> recuperarTodasPecas() throws RemoteException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Part buscarPecaPorCodigo(long codigoPeca) throws RemoteException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean adicionarAoRepositorio(Part peca) throws RemoteException
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public String nomeDoRepositorio() throws RemoteException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 	
 	public static void main(String[] args) 
 	{
 
-		 try 
-		 {
-			Servidor obj = new Servidor();			
+        try {
+			PartRepository obj = new Servidor();
 			PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(obj, 0);
 			
             // Bind the remote object's stub in the registry
@@ -22,37 +50,9 @@ public class Servidor implements PartRepository
             registry.bind("PartRepository", stub);
 		
             System.out.println("Server ready");
-        } 
-		catch (Exception e) 
-		 {
+        } catch (Exception e) {
 	            System.err.println("Server exception: " + e.toString());
 	            e.printStackTrace();
-         }
-	}
-
-	private List<Part> partes = null;
-
-	public List<Part> recuperarTodasPecas()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Part buscarPecaPorCodigo(long codigoPeca)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean adicionarAoRepositorio(Part peca)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public String nomeDoRepositorio()
-	{
-		// TODO Auto-generated method stub
-		return null;
+        }
 	}
 }
