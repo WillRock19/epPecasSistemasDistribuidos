@@ -1,3 +1,5 @@
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GeradorMensagens 
@@ -48,9 +50,33 @@ public class GeradorMensagens
 		MensagemSimples("----------------------------------------------------------------------");
 	}
 	
-	public void ExibirPecasRepositorio()
+	public void ExibirPecasRepositorio(List<Part> pecas)
 	{
+		MensagemSimples("O repositorio possui as seguintes Pecas: \r");
 		
+		for(Part peca : pecas)
+		{
+			ExibirPecaNoNivel(peca, 1);
+		}
+		MensagemSimples("----------------------------------------------------------------------");
+	}
+	
+	public void ExibirPecaNoNivel(Part peca, int nivel)
+	{
+		String marker = String.join("", Collections.nCopies(nivel, "*"));
+		MensagemSimples(marker  + "Codigo: " + peca.codigo);
+		MensagemSimples(marker  + "Nome: " + peca.nome);
+		MensagemSimples(marker  + "Descricao: " + peca.descricao);
+		
+		if(!peca.subcomponentes.isEmpty())
+		{
+			for(Subcomponente subcomponente : peca.subcomponentes)
+			{
+				MensagemSimples(marker  + "Quantidade Subcomponentes: " + subcomponente.quantidadeSubpartes);
+				MensagemSimples(marker  + "Dados do Subcomponente: ");
+				ExibirPecaNoNivel(subcomponente.subParte, nivel + 1);
+			}
+		}
 	}
 	
 	public void EncerrarAplicacao()

@@ -26,7 +26,7 @@ public class OperadorRepositorios
 				break;
 		
 			case Comandos.ListarPeca:
-				
+				ListarPecasRepositorio();
 				break;
 				
 			case Comandos.RecuperarPeca:
@@ -84,11 +84,12 @@ public class OperadorRepositorios
 		}
 	}
 	
-	private void ListarPecasRepositorioAtual()
+	private void ListarPecasRepositorio()
 	{
-		try{
+		try
+		{
             List<Part> response = repositorioAtual.recuperarTodasPecas();
-			
+			mensagens.ExibirPecasRepositorio(response);
 		}
 		catch(Exception e){
 			mensagens.MensagemDeErro("Não foi possível listar as Pecas do repositorio.");
