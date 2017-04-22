@@ -86,9 +86,9 @@ public class GeradorMensagens
 		{
 			for(Subcomponente subcomponente : peca.getSubcomponentes())
 			{
-				MensagemSimples(marker  + "Quantidade Subcomponentes: " + subcomponente.quantidadeSubpartes);
+				MensagemSimples(marker  + "Quantidade Subcomponentes: " + subcomponente.quantidadeSubpecas);
 				MensagemSimples(marker  + "Dados do Subcomponente: ");
-				ExibirPecaNoNivel(subcomponente.subParte, nivel + 1);
+				ExibirPecaNoNivel(subcomponente.subPeca, nivel + 1);
 			}
 		}
 	}

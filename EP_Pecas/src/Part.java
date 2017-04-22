@@ -12,6 +12,13 @@ public class Part
     private List<Subcomponente> subcomponentes;
 
     public Part() {}
+    
+    public Part(String nome, String codigo, String descricao) 
+    {
+    	this.nome = nome;
+    	this.codigo = codigo;
+    	this.descricao = descricao;
+    }
 
 	public Part(String codigo, String nome, String descricao, List<Subcomponente> subcomponentes) {
 	    this.codigo = codigo;
@@ -61,6 +68,11 @@ public class Part
 	public boolean PecaEhAgregada()
 	{
 		return !SubComponentesEstaVazio();
+	}
+	
+	public void LimparSubcomponentes()
+	{
+		this.subcomponentes.clear();
 	}
 	
 	private boolean SubComponentesEstaVazio()
