@@ -12,7 +12,6 @@ public class Servidor implements PartRepository
 	public static void main(String[] args) 
 	{
 
-		/*
 		 try 
 		 {
 			Servidor obj = new Servidor();			
@@ -31,7 +30,6 @@ public class Servidor implements PartRepository
 	            System.err.println("Server exception: " + e.toString());
 	            e.printStackTrace();
          }
-         */
 	}
 
 	public List<Part> recuperarTodasPecas() 

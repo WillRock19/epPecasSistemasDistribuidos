@@ -1,29 +1,17 @@
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.Scanner;
 
 public class Cliente 
 {
-
-	private Part pecaAtual;
-	private String hostRmiRegistry;
-	
-	private static PartRepository repositorioAtual;
-	private static Registry RmiRegistry;
-	private static boolean executarPrograma;
+	private static String hostRmiRegistry;	
+	private static OperadorRepositorios operadorRepositorios;
 	private static GeradorMensagens mensagens;
-	
-	
-	public Cliente()
-	{
-		executarPrograma = true;
-		mensagens = new GeradorMensagens();	
-	}
+	private static boolean executarPrograma;
 	
 	public static void main(String[] args) 
 	{
-		IniciarPrograma(args);
+		DefinirHostRmiRegistry(args);
+		IniciarPrograma();
 		
 		while(executarPrograma)
 		{
@@ -31,7 +19,10 @@ public class Cliente
 				
 			if(comando.length <= 2)
 			{
-				ExecutarComandoUsuario(comando);
+				if(Comandos.Encerrar.equals(comando))
+					executarPrograma = false;
+				else	
+					operadorRepositorios.ExecutarOperacoes(comando);
 			}
 			else
 				mensagens.ComandoContemParametrosDemais();
@@ -39,15 +30,17 @@ public class Cliente
 		mensagens.EncerrarAplicacao();
 	}
 	
-	private static void IniciarPrograma(String[] argumentos)
+	private static void IniciarPrograma()
 	{
 		executarPrograma = true;
 		mensagens = new GeradorMensagens();
-				
-		AcessarRmiRegistry(null);
+		operadorRepositorios = new OperadorRepositorios();
+		
+		operadorRepositorios.ConectarAoRmiRegistry(hostRmiRegistry);
 		
 		mensagens.IniciarAplicacao();
-		mensagens.ExibirListaDeComandos();
+		mensagens.ExibirComandos();
+		mensagens.ExibirRepositoriosExistentes(hostRmiRegistry, operadorRepositorios.ListarRepositoriosDoRmiRegistry());
 	}
 		
 	private static String[] CapturarComandoUsuario()
@@ -59,79 +52,9 @@ public class Cliente
 		return comando.split(" ");
 	}
 	
-	private static void ExecutarComandoUsuario(String[] comandoEParametro)
+	private static void DefinirHostRmiRegistry(String[] args)
 	{
-		String comando = comandoEParametro[0];
-		String parametro = comandoEParametro[1];
-		
-		switch(comando)
-		{
-			case Comandos.VincularAoRepositorio:
-				VincularAoRepositorio(parametro);
-				break;
-		
-			case Comandos.ListarPeca:
-				
-				break;
-				
-			case Comandos.RecuperarPeca:
-				
-				break;
-			
-			case Comandos.MostrarPeca:
-	
-				break;
-			case Comandos.LimparLista:
-	
-				break;
-			case Comandos.AddSubPeca:
-	
-				break;
-			case Comandos.AddPeca:
-	
-				break;
-				
-			case Comandos.Encerrar:
-				executarPrograma = false;
-				break;
-
-			default:
-				mensagens.MensagemDeErro("O comando informado não foi aceito pelo sistema.");
-				break;
-		}
-	}
-	
-	private static void AcessarRmiRegistry(String endereco)
-	{
-		//TODO: Dar um jeito de executar o endereço se ele for nulo
-		
-		try{
-			RmiRegistry = LocateRegistry.getRegistry();	
-		}
-		catch(Exception e) {
-            mensagens.MensagemDeErro("Não foi possível se concetar ao RMI Registry especificado. O seguinte erro ocorreu: " + e.getMessage());
-		}
-	}
-	
-	private String[] ListaRepositorios()
-	{
-		try{
-			return RmiRegistry.list();	
-		}
-		catch(Exception e){
-			mensagens.MensagemDeErro("Não foi possível encontrar uma lista de Registros no RMI Registry.");
-			return null;
-		}
-	}
-	
-	private static void VincularAoRepositorio(String nomeRepositorio)
-	{
-		try{
-			repositorioAtual = (PartRepository) RmiRegistry.lookup(nomeRepositorio);
-			mensagens.RepositorioVinculado();
-		}
-		catch(Exception e){
-			mensagens.MensagemDeErro("Não foi possível vincular ao repositório desejado.");
-		}
+		if(args.length > 0)
+			hostRmiRegistry = args[0];
 	}
 }
