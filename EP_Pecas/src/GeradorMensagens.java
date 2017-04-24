@@ -35,10 +35,14 @@ public class GeradorMensagens
 	public void ExibirComandos()
 	{
 		MensagemSimples("Os seguintes comandos sao validos: \r");
-		MensagemSimples("	bind  [RepositoryName] : Conecta com o reposítorio especificado\r");
+		MensagemSimples("	bind  [RepositoryName] : Conecta com o outro servidor e conecta com o reposítorio especificado\r");
 		MensagemSimples("	listp                  : Lista todas as peças do repositório atual\r");
-		
-		//TO DO: imprimir lista com todos os comandos (usar enum), explicando o que cad aum eh
+        MensagemSimples("	getp                   : Busca uma peça por código no repositório corrente e a seta como nova peça corrente\r");
+        MensagemSimples("	showp                  : Mostra os atributos da peça corrente\r");
+        MensagemSimples("	clearlist              : Esvazia a lista de subpeças da peça corrente\r");
+        MensagemSimples("	addsubpart    [Number] : Adiciona [Number] unidades da peça corrente à lista de subpeças\r");
+        MensagemSimples("	addp                   : \r");
+        MensagemSimples("	quit                   : Encerra a aplicação do cliente\r");
 	}
 	
 	public void ExibirRepositoriosExistentes(String host, String[] repositorios)
