@@ -7,47 +7,60 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Servidor implements PartRepository {
-    private List<Part> partes = null;
 
-    private static String serverName = null;
+    private List<Part> parts = null;
+
+    private String repositoryName = null;
 
     private static String host = "127.0.0.1";
 
     private static int port = Registry.REGISTRY_PORT;
 
 
-	public Servidor() throws RemoteException {
-	    super();
+	public Servidor (String serverName) throws RemoteException {
+
+	    this.repositoryName = serverName;
+	    this.parts = new LinkedList<>();
     }
 
-    public List<Part> recuperarTodasPecas() throws RemoteException {
-        // TODO Auto-generated method stub
+    public String getRepositoryName () throws RemoteException {
+
+        return this.repositoryName;
+    }
+
+    public Part get (String codigo) throws RemoteException {
+
+        for (Part p : this.parts) {
+            if (p.getCodigo().equalsIgnoreCase(codigo)) {
+                return p;
+            }
+        }
         return null;
     }
 
-    public Part buscarPecaPorCodigo(long codigoPeca) throws RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Part> getAll () throws RemoteException {
+
+        return this.parts;
     }
 
-    public boolean adicionarAoRepositorio(Part peca) throws RemoteException {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean add (Part p) throws RemoteException {
+
+        return this.parts.add(p);
     }
 
-    public String nomeDoRepositorio() throws RemoteException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+
 	
 	public static void main(String[] args) throws RemoteException {
 
-	    if (setupServer(args) == false) {
+	    String serverName = setupServer(args);
+
+	    if (serverName == null) {
 	        System.exit(1);
         }
 
@@ -56,16 +69,12 @@ public class Servidor implements PartRepository {
 
         try {
 
-            stub = (PartRepository) UnicastRemoteObject.exportObject(new Servidor(), 0);
-            System.out.println(stub.toString());
+            stub = (PartRepository) UnicastRemoteObject.exportObject(new Servidor(serverName), 0);
 
             registry = LocateRegistry.getRegistry(host, port);
-            System.out.println(registry.toString());
 
             // Bind the remote object's stub in the registry
             registry.bind(serverName, stub);
-
-
 
             System.out.println("Server '" + serverName + "' is ready!\n" +
                     "RMI Service was found on the host: '" + host + "' and port: '" + port + "'");
@@ -86,7 +95,7 @@ public class Servidor implements PartRepository {
 
 	}
 
-	private static boolean setupServer (String[] args) {
+	private static String setupServer (String[] args) {
 
         String patternString = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -95,6 +104,8 @@ public class Servidor implements PartRepository {
 
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher;
+
+        String serverName = null;
 
 	    switch (args.length) {
             case 0:
@@ -147,7 +158,7 @@ public class Servidor implements PartRepository {
                 break;
         }
 
-        return (serverName != null);
+        return serverName;
 
     }
 }

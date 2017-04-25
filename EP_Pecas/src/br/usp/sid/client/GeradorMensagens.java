@@ -45,11 +45,12 @@ public class GeradorMensagens
         MensagemSimples("	current                : Mostra o nome do repositório corrente\r");
 
 		MensagemSimples("	listp                  : Lista todas as peças do repositório atual\r");
-        MensagemSimples("	getp                   : Busca uma peça por código no repositório corrente e a seta como nova peça corrente\r");
+        MensagemSimples("	getp          [Codigo] : Busca uma peça por código no repositório corrente e a seta como nova peça corrente\r");
         MensagemSimples("	showp                  : Mostra os atributos da peça corrente\r");
         MensagemSimples("	clearlist              : Esvazia a lista de subpeças da peça corrente\r");
-        MensagemSimples("	addsubpart    [Number] : Adiciona [Number] unidades da peça corrente à lista de subpeças\r");
-        MensagemSimples("	addp                   : \r");
+        MensagemSimples("	addsubp       [Number] : Adiciona [Number] unidades da peça corrente à lista de subpeças\r");
+        MensagemSimples("	addp                   : Adiciona uma peça ao repositório corrente\r");
+
         MensagemSimples("	quit                   : Encerra a aplicação do cliente\r");
         MensagemSimples("	help                   : Mostra o menu de comandos disponíveis\r");
 	}
@@ -90,38 +91,43 @@ public class GeradorMensagens
 			MensagemSimples("---- Não existe peças para o repositório solicitado ---- \r");
 		} else {
 			MensagemSimples("O repositorio possui as seguintes Pecas: \r");
+            MensagemSimples("----------------------------------------------------------------------");
 		}
-		
+
 		for(Part peca : pecas)
 		{
-			ExibirPecaNoNivel(peca, 1);
+			ExibirPecaNoNivel(peca, 1, false);
 		}
-		MensagemSimples("----------------------------------------------------------------------");
 	}
 	
-	public void ExibirPecaNoNivel(Part peca, int nivel)
+	public void ExibirPecaNoNivel(Part peca, int nivel, boolean isSubcomponente)
 	{
 		String marker = String.join("", Collections.nCopies(nivel, "*"));
 		MensagemSimples(marker  + "Codigo: " + peca.getCodigo());
 		MensagemSimples(marker  + "Nome: " + peca.getNome());
 		MensagemSimples(marker  + "Descricao: " + peca.getDescricao());
+
 		
 		if(peca.PecaEhAgregada())
 		{
-			for(Subcomponente subcomponente : peca.getSubcomponentes())
+			for(Subcomponente subcomponente : peca.getSubComponentes())
 			{
-				MensagemSimples(marker  + "Quantidade Subcomponentes: " + subcomponente.quantidadeSubpecas);
-				MensagemSimples(marker  + "Dados do br.usp.sid.util.Subcomponente: ");
-				ExibirPecaNoNivel(subcomponente.subPeca, nivel + 1);
+                MensagemSimples("----------------------------------");
+			    MensagemSimples(marker  + "Quantidade Subcomponentes: " + subcomponente.quantidadeSubpecas);
+				MensagemSimples(marker  + "Dados do Subcomponente: ");
+				ExibirPecaNoNivel(subcomponente.subPeca, nivel + 1, true);
 			}
-		}
+            MensagemSimples("----------------------------------------------------------------------");
+		} else if(isSubcomponente == false) {
+            MensagemSimples("----------------------------------------------------------------------");
+        }
 	}
 	
 	public void EncerrarAplicacao()
 	{
 		try
 		{
-			MensagemSimples("Encerrando aplicação br.usp.sid.client.Cliente...");
+			MensagemSimples("Encerrando aplicação Cliente...");
 			TimeUnit.SECONDS.sleep(3);
 		}
 		catch(Exception e){

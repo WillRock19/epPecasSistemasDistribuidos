@@ -1,12 +1,12 @@
 package br.usp.sid.util;
 
-public class Subcomponente
+import java.io.Serializable;
+
+public class Subcomponente implements Serializable
 {	
 	public Part subPeca;
 	
 	public int quantidadeSubpecas;
-	
-	public Subcomponente(){}
 	
 	public Subcomponente(Part subParte, int quantidadeSubpecas)
 	{

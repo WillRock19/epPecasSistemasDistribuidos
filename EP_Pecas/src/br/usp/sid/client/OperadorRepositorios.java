@@ -9,6 +9,7 @@ import java.rmi.registry.Registry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class OperadorRepositorios 
 {
@@ -22,17 +23,15 @@ public class OperadorRepositorios
 
 	private GeradorMensagens mensagens;
 
-	private String serverNameCurrent = null;
 
 
-	
-	public OperadorRepositorios()
+    public OperadorRepositorios()
 	{
 		mensagens = new GeradorMensagens();
 		subcomponentesAtuais = new LinkedList<Subcomponente>();
 	}
-	
-	public void ExecutarOperacoes(String[] comandoEParametro)
+
+    protected void ExecutarOperacoes(String[] comandoEParametro)
 	{
 	    if (comandoEParametro.length != 0) {
             String comando = comandoEParametro[0];
@@ -49,7 +48,7 @@ public class OperadorRepositorios
                     break;
 
                 case Comandos.currentRepository:
-                    mensagens.ExibirRepositoriosCorrente(Cliente.host, getServerNameCurrent());
+                    mensagens.ExibirRepositoriosCorrente(Cliente.host, MostrarNomeDoRepositorio());
                     break;
 
                 case Comandos.ListarPeca:
@@ -73,7 +72,7 @@ public class OperadorRepositorios
                     break;
                     
                 case Comandos.AddSubPeca:
-            		AdicionarPecaAtualComoSubcomponenteAtual();
+            		AdicionarPecaAtualComoSubcomponenteAtual(parametro);
                     break;
 
                 case Comandos.help:
@@ -86,8 +85,8 @@ public class OperadorRepositorios
             }
         }
 	}
-	
-	public boolean ConectarAoRmiRegistry(String host, int port)
+
+    protected boolean ConectarAoRmiRegistry(String host, int port)
 	{
 		try {
 
@@ -100,8 +99,8 @@ public class OperadorRepositorios
 
 		return true;
 	}
-	
-	public String[] ListarRepositoriosDoRmiRegistry()
+
+    protected String[] ListarRepositoriosDoRmiRegistry()
 	{
 		try {
 			return this.rmiRegistry.list();
@@ -110,23 +109,26 @@ public class OperadorRepositorios
 		}
 	}
 
-	public String getServerNameCurrent () {
-	    return this.serverNameCurrent;
+	private String MostrarNomeDoRepositorio () {
+
+        try {
+            return this.repositorioAtual.getRepositoryName();
+        } catch(Exception e) {
+            mensagens.OperacaoNaoPodeSerRealizada();
+        }
+        return null;
     }
 	
 	private void VincularAoRepositorio(String nomeRepositorio)
 	{
-	    this.serverNameCurrent = nomeRepositorio;
-		if (this.serverNameCurrent.equals("")) {
+		if (nomeRepositorio.equals("")) {
 			mensagens.Erro("Você precisa informar o nome do repositório desejado.");
 		} else {
 			try {
 
-                this.repositorioAtual = (PartRepository) this.rmiRegistry.lookup(this.serverNameCurrent);
+                this.repositorioAtual = (PartRepository) this.rmiRegistry.lookup(nomeRepositorio);
 
-                System.out.println(this.repositorioAtual.toString());
-
-				mensagens.MensagemSimples("Repositório vinculado com sucesso!");
+				mensagens.RepositorioConectado();
 			} catch(Exception e) {
                 mensagens.OperacaoNaoPodeSerRealizada();
 			}
@@ -136,7 +138,7 @@ public class OperadorRepositorios
 	private void ListarPecasRepositorio()
 	{
 		try {
-            List<Part> response = repositorioAtual.recuperarTodasPecas();
+            List<Part> response = this.repositorioAtual.getAll();
             
             if (response.isEmpty()) {
                 mensagens.MensagemSimples("Não existem peças no repositório atual.");
@@ -151,11 +153,11 @@ public class OperadorRepositorios
 	private void RecuperarPecaPorCodigo(String codigo)
 	{
 		try {
-            Part response = repositorioAtual.buscarPecaPorCodigo(Integer.parseInt(codigo));
+            Part response = this.repositorioAtual.get(codigo);
 			
             if (response != null) {
             	pecaAtual = response;
-            	mensagens.MensagemSimples("A Peça de código" + codigo + " foi encontrada e definida como Peça corrente.");
+            	mensagens.MensagemSimples("A Peça de código " + codigo + " foi encontrada e definida como Peça corrente.");
             } else
             	mensagens.MensagemSimples("Nao existe uma peça com o código informado.");
             
@@ -167,7 +169,7 @@ public class OperadorRepositorios
 	private void MostrarPecaAtual()
 	{
 		if (pecaAtual != null)
-			mensagens.ExibirPecaNoNivel(pecaAtual, 1);
+			mensagens.ExibirPecaNoNivel(pecaAtual, 1, false);
 		else
 			mensagens.Erro("Não existe uma peça atual definida neste repositório.");
 	}
@@ -185,45 +187,57 @@ public class OperadorRepositorios
 	
 	private void AdicionarPecaAoRepositorio()
 	{
-		try
-		{
-			Part novaPeca = ReceberInformacoesECriarNovaPeca();
-			novaPeca.setSubcomponentes(subcomponentesAtuais);
-			
-			repositorioAtual.adicionarAoRepositorio(novaPeca);
-			mensagens.MensagemSimples("A Peça adicionada ao repostorio atual com sucesso!");
-		}
-		catch(Exception e){
-			mensagens.OperacaoNaoPodeSerRealizada();
-		}
+        if (this.repositorioAtual != null){
+
+            try {
+                Part novaPeca = ReceberInformacoesECriarNovaPeca();
+                novaPeca.setSubComponentes(subcomponentesAtuais);
+
+                this.repositorioAtual.add(novaPeca);
+                mensagens.MensagemSimples("A Peça adicionada ao repostorio atual com sucesso!");
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                mensagens.OperacaoNaoPodeSerRealizada();
+            }
+        } else {
+            mensagens.Erro("Ainda não há um repositório definido.\n" +
+                    "Por favor, use o comando '" + Comandos.VincularAoRepositorio + "' para vincular a um repositório.");
+        }
 	}
 	
 	private Part ReceberInformacoesECriarNovaPeca()
 	{
 		Scanner sc = new Scanner(System.in);			
 		mensagens.MensagemSimples("Para adicionar uma Peça ao repositório atual, informe os dados: ");
-
-		mensagens.MensagemSimples("Codigo da Peça: ");
-		String codigo = sc.next();
 		
 		mensagens.MensagemSimples("Nome da Peça: ");
 		String nome = sc.next();
 		
 		mensagens.MensagemSimples("Descrição da Peça: ");
 		String descricao = sc.next();
-		
-		return new Part(nome, codigo, descricao);
+
+		String codigo = UUID.randomUUID().toString();
+
+		mensagens.MensagemSimples("O código da nova peça é: " + codigo);
+
+        return new Part(nome, codigo, descricao);
 	}
 	
-	private void AdicionarPecaAtualComoSubcomponenteAtual()
+	private void AdicionarPecaAtualComoSubcomponenteAtual(String quantidade)
 	{
-		try
-		{
-			Scanner sc = new Scanner(System.in);
-			mensagens.MensagemSimples("Informe a quantidade de subcomponentes a serem adicionados: ");
-			int quantidade = sc.nextInt();
-			
-			this.subcomponentesAtuais.add(new Subcomponente(pecaAtual, quantidade));
+	    int qtd;
+		try {
+
+		    if (quantidade.equals("")) {
+                Scanner sc = new Scanner(System.in);
+                mensagens.MensagemSimples("Informe a quantidade de subcomponentes a serem adicionados: ");
+                qtd = sc.nextInt();
+            } else {
+		        qtd = Integer.parseInt(quantidade);
+            }
+
+			this.subcomponentesAtuais.add(new Subcomponente(pecaAtual, qtd));
 			
 			mensagens.MensagemSimples("A 'Peça atual' foi adicionada à lista de 'Subcomponentes atuais' com sucesso!");
 		}

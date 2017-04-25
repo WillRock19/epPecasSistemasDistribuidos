@@ -2,19 +2,21 @@ package br.usp.sid.server;
 
 import br.usp.sid.util.Part;
 
-import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
-public interface PartRepository extends Remote
-{
-	List<Part> partes = null;
+public interface PartRepository extends Remote {
 
-	List<Part> recuperarTodasPecas() throws RemoteException;
+	String repositoryName = null;
+
+	List<Part> parts = null;
+
+	List<Part> getAll () throws RemoteException;
 	
-	Part buscarPecaPorCodigo(long codigoPeca) throws RemoteException;
+	Part get (String codigo) throws RemoteException;
 	
-	boolean adicionarAoRepositorio(Part peca) throws RemoteException;
+	boolean add (Part p) throws RemoteException;
 	
-	String nomeDoRepositorio() throws RemoteException;
+	String getRepositoryName() throws RemoteException;
 }

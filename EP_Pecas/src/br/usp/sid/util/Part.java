@@ -1,8 +1,10 @@
 package br.usp.sid.util;
 
+import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
-public class Part
+public class Part implements Serializable
 {
 
 	private String codigo;
@@ -11,22 +13,14 @@ public class Part
 
     private String descricao;
 
-    private List<Subcomponente> subcomponentes;
-
-    public Part() {}
+    private List<Subcomponente> subComponentes;
     
     public Part(String nome, String codigo, String descricao) 
     {
     	this.nome = nome;
     	this.codigo = codigo;
     	this.descricao = descricao;
-    }
-
-	public Part(String codigo, String nome, String descricao, List<Subcomponente> subcomponentes) {
-	    this.codigo = codigo;
-	    this.nome = nome;
-	    this.descricao = descricao;
-	    this.subcomponentes = subcomponentes;
+    	this.subComponentes = new LinkedList<>();
     }
 
 	public String getCodigo() {
@@ -54,12 +48,12 @@ public class Part
 		this.descricao = descricao;
 	}
 
-	public List<Subcomponente> getSubcomponentes() {
-		return subcomponentes;
+	public List<Subcomponente> getSubComponentes() {
+		return subComponentes;
 	}
 
-	public void setSubcomponentes(List<Subcomponente> subcomponentes) {
-		this.subcomponentes = subcomponentes;
+	public void setSubComponentes(List<Subcomponente> subComponentes) {
+		this.subComponentes = subComponentes;
 	}
 
 	public boolean PecaEhPrimitiva()
@@ -74,11 +68,11 @@ public class Part
 	
 	public void LimparSubcomponentes()
 	{
-		this.subcomponentes.clear();
+		this.subComponentes.clear();
 	}
 	
 	private boolean SubComponentesEstaVazio()
 	{
-		return subcomponentes.isEmpty();
+		return subComponentes.isEmpty();
 	}
 }

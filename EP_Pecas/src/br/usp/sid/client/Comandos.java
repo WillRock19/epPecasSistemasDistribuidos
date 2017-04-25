@@ -9,7 +9,7 @@ final class Comandos
 	public static final String RecuperarPecaPorCodigo = "getp";
 	public static final String MostrarPeca = "showp";
 	public static final String LimparLista = "clearlist";
-	public static final String AddSubPeca = "addsubpart";
+	public static final String AddSubPeca = "addsubp";
 	public static final String AddPeca = "addp";
 	public static final String help = "help";
 	public static final String Encerrar = "quit";
