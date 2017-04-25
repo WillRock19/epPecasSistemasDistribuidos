@@ -29,42 +29,42 @@ public class GeradorMensagens
 	
 	public void IniciarAplicacao()
 	{
-		MensagemSimples("Bem-vindo ‡ aplicaÁ„o de PeÁas!");
+		MensagemSimples("Bem-vindo √† aplica√ß√£o de Pe√ßas!");
 	}
 	
 	public void RepositorioConectado()
 	{
-		MensagemSimples("RepositÛrio conectado com sucesso!");
+		MensagemSimples("Reposit√≥rio conectado com sucesso!");
 	}
 	
 	public void ExibirComandos()
 	{
 		MensagemSimples("Os seguintes comandos sao validos: \r");
-		MensagemSimples("	bind  [RepositoryName] : Conecta com o outro servidor e seta o novo repositÛrio corrente\r");
-        MensagemSimples("	list                   : Lista todos os repositÛrios disponÌveis\r");
-        MensagemSimples("	current                : Mostra o nome do repositÛrio corrente\r");
+		MensagemSimples("	bind  [RepositoryName] : Conecta com o outro servidor e seta o novo reposit√≥rio corrente\r");
+        MensagemSimples("	list                   : Lista todos os reposit√≥rios dispon√≠veis\r");
+        MensagemSimples("	current                : Mostra o nome do reposit√≥rio corrente\r");
 
-		MensagemSimples("	listp                  : Lista todas as peÁas do repositÛrio atual\r");
-        MensagemSimples("	getp          [Codigo] : Busca uma peÁa por cÛdigo no repositÛrio corrente e a seta como nova peÁa corrente\r");
-        MensagemSimples("	showp                  : Mostra os atributos da peÁa corrente\r");
-        MensagemSimples("	clearlist              : Esvazia a lista de subpeÁas da peÁa corrente\r");
-        MensagemSimples("	addsubp       [Number] : Adiciona [Number] unidades da peÁa corrente ‡ lista de subpeÁas\r");
-        MensagemSimples("	addp                   : Adiciona uma peÁa ao repositÛrio corrente\r");
+		MensagemSimples("	listp                  : Lista todas as pe√ßas do reposit√≥rio atual\r");
+        MensagemSimples("	getp          [Codigo] : Busca uma pe√ßa por c√≥digo no reposit√≥rio corrente e a seta como nova pe√ßa corrente\r");
+        MensagemSimples("	showp                  : Mostra os atributos da pe√ßa corrente\r");
+        MensagemSimples("	clearlist              : Esvazia a lista de subpe√ßas da pe√ßa corrente\r");
+        MensagemSimples("	addsubp       [Number] : Adiciona [Number] unidades da pe√ßa corrente √† lista de subpe√ßas\r");
+        MensagemSimples("	addp                   : Adiciona uma pe√ßa ao reposit√≥rio corrente\r");
 
-        MensagemSimples("	quit                   : Encerra a aplicaÁ„o do cliente\r");
-        MensagemSimples("	help                   : Mostra o menu de comandos disponÌveis\r");
+        MensagemSimples("	quit                   : Encerra a aplica√ß√£o do cliente\r");
+        MensagemSimples("	help                   : Mostra o menu de comandos dispon√≠veis\r");
 	}
 	
 	public void ExibirRepositoriosExistentes(String host, String[] repositorios)
 	{
 		if (host == null) {
-			MensagemSimples("Os seguintes repositÛrios est„o disponÌveis: \r");
+			MensagemSimples("Os seguintes reposit√≥rios est√£o dispon√≠veis: \r");
 		} else {
-			MensagemSimples("O host '" + host + "' possui os seguintes repositÛrios: \r");
+			MensagemSimples("O host '" + host + "' possui os seguintes reposit√≥rios: \r");
 		}
 
 		if (repositorios.length == 0) {
-			MensagemSimples("---- N„o existe repositÛrios para o host solicitado ----");
+			MensagemSimples("---- N√£o existe reposit√≥rios para o host solicitado ----");
 		}
 
 		for(String repositorio : repositorios)
@@ -77,18 +77,18 @@ public class GeradorMensagens
 	public void ExibirRepositoriosCorrente (String host, String serverName) {
 
         if (host == null && serverName != null) {
-            MensagemSimples("VocÍ est· conectado ao repositÛrio '" + serverName + "'\r");
+            MensagemSimples("Voc√™ est√° conectado ao reposit√≥rio '" + serverName + "'\r");
         } else if (serverName != null) {
-            MensagemSimples("VocÍ est· conectado ao repositÛrio '" + serverName + "' no RMI Service de host '" + host + "'\r");
+            MensagemSimples("Voc√™ est√° conectado ao reposit√≥rio '" + serverName + "' no RMI Service de host '" + host + "'\r");
         } else {
-            MensagemSimples("VocÍ n„o est· conectado a nenhum repositÛrio\r");
+            MensagemSimples("Voc√™ n√£o est√° conectado a nenhum reposit√≥rio\r");
         }
     }
 	
 	public void ExibirPecasRepositorio(List<Part> pecas)
 	{
 		if (pecas == null) {
-			MensagemSimples("---- N„o existe peÁas para o repositÛrio solicitado ---- \r");
+			MensagemSimples("---- N√£o existe pe√ßas para o reposit√≥rio solicitado ---- \r");
 		} else {
 			MensagemSimples("O repositorio possui as seguintes Pecas: \r");
             MensagemSimples("----------------------------------------------------------------------");
@@ -127,18 +127,18 @@ public class GeradorMensagens
 	{
 		try
 		{
-			MensagemSimples("Encerrando aplicaÁ„o Cliente...");
+			MensagemSimples("Encerrando aplica√ß√£o Cliente...");
 			TimeUnit.SECONDS.sleep(3);
 		}
 		catch(Exception e){
-			Erro("Uma exceÁ„o n„o tratada ocorreu. A exceÁ„o È: " + e.getMessage());
+			Erro("Uma exce√ß√£o n√£o tratada ocorreu. A exce√ß√£o √©: " + e.getMessage());
 		}
 	}
 	
 	public void ComandoContemParametrosDemais()
 	{
-		MensagemSimples("O comando inserido contÈm par‚metros a mais do que È permitido.");
-		MensagemSimples("Favor, insira um comando com atÈ UM par‚metro.");
+		MensagemSimples("O comando inserido cont√©m par√¢metros a mais do que √© permitido.");
+		MensagemSimples("Favor, insira um comando com at√© UM par√¢metro.");
 		MensagemSimples("\r");
 	}
 	

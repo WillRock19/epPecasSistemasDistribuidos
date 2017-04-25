@@ -80,7 +80,7 @@ public class OperadorRepositorios
                     break;
                     
                 default:
-                    mensagens.Erro("O comando informado n„o foi aceito pelo sistema.");
+                    mensagens.Erro("O comando informado n√£o foi aceito pelo sistema.");
                     break;
             }
         }
@@ -93,7 +93,7 @@ public class OperadorRepositorios
 			this.rmiRegistry = LocateRegistry.getRegistry(host, port);
 
 		} catch (Exception e) {
-            mensagens.Erro("N„o foi possÌvel se conectar ao RMI Registry. O seguinte erro ocorreu: \n" + e.getMessage() + "\r");
+            mensagens.Erro("N√£o foi poss√≠vel se conectar ao RMI Registry. O seguinte erro ocorreu: \n" + e.getMessage() + "\r");
             return false;
 		}
 
@@ -122,7 +122,7 @@ public class OperadorRepositorios
 	private void VincularAoRepositorio(String nomeRepositorio)
 	{
 		if (nomeRepositorio.equals("")) {
-			mensagens.Erro("VocÍ precisa informar o nome do repositÛrio desejado.");
+			mensagens.Erro("Voc√™ precisa informar o nome do reposit√≥rio desejado.");
 		} else {
 			try {
 
@@ -141,7 +141,7 @@ public class OperadorRepositorios
             List<Part> response = this.repositorioAtual.getAll();
             
             if (response.isEmpty()) {
-                mensagens.MensagemSimples("N„o existem peÁas no repositÛrio atual.");
+                mensagens.MensagemSimples("N√£o existem pe√ßas no reposit√≥rio atual.");
             } else {
                 mensagens.ExibirPecasRepositorio(response);
             }
@@ -157,9 +157,9 @@ public class OperadorRepositorios
 			
             if (response != null) {
             	pecaAtual = response;
-            	mensagens.MensagemSimples("A PeÁa de cÛdigo " + codigo + " foi encontrada e definida como PeÁa corrente.");
+            	mensagens.MensagemSimples("A Pe√ßa de c√≥digo " + codigo + " foi encontrada e definida como Pe√ßa corrente.");
             } else
-            	mensagens.MensagemSimples("Nao existe uma peÁa com o cÛdigo informado.");
+            	mensagens.MensagemSimples("Nao existe uma pe√ßa com o c√≥digo informado.");
             
 		} catch(Exception e){
 			mensagens.OperacaoNaoPodeSerRealizada();
@@ -171,17 +171,17 @@ public class OperadorRepositorios
 		if (pecaAtual != null)
 			mensagens.ExibirPecaNoNivel(pecaAtual, 1, false);
 		else
-			mensagens.Erro("N„o existe uma peÁa atual definida neste repositÛrio.");
+			mensagens.Erro("N√£o existe uma pe√ßa atual definida neste reposit√≥rio.");
 	}
 	
 	private void LimparListaDeSubcomponentes()
 	{
 		if(pecaAtual == null)
-			mensagens.Erro("N„o È possÌvel limpar a lista de subcomponentes; n„o h· nenhuma peÁa definida como 'PeÁa corrente'.");
+			mensagens.Erro("N√£o √© poss√≠vel limpar a lista de subcomponentes; n√£o h√° nenhuma pe√ßa definida como 'Pe√ßa corrente'.");
 		else
 		{
 			pecaAtual.LimparSubcomponentes();
-			mensagens.MensagemSimples("A lista de subcomponentes da PeÁa " + pecaAtual.getNome() + " foi limpa com sucesso!");
+			mensagens.MensagemSimples("A lista de subcomponentes da Pe√ßa " + pecaAtual.getNome() + " foi limpa com sucesso!");
 		}
 	}
 	
@@ -194,32 +194,32 @@ public class OperadorRepositorios
                 novaPeca.setSubComponentes(subcomponentesAtuais);
 
                 this.repositorioAtual.add(novaPeca);
-                mensagens.MensagemSimples("A PeÁa adicionada ao repostorio atual com sucesso!");
+                mensagens.MensagemSimples("A Pe√ßa adicionada ao repostorio atual com sucesso!");
             }
             catch(Exception e){
                 e.printStackTrace();
                 mensagens.OperacaoNaoPodeSerRealizada();
             }
         } else {
-            mensagens.Erro("Ainda n„o h· um repositÛrio definido.\n" +
-                    "Por favor, use o comando '" + Comandos.VincularAoRepositorio + "' para vincular a um repositÛrio.");
+            mensagens.Erro("Ainda n√£o h√° um reposit√≥rio definido.\n" +
+                    "Por favor, use o comando '" + Comandos.VincularAoRepositorio + "' para vincular a um reposit√≥rio.");
         }
 	}
 	
 	private Part ReceberInformacoesECriarNovaPeca()
 	{
 		Scanner sc = new Scanner(System.in);			
-		mensagens.MensagemSimples("Para adicionar uma PeÁa ao repositÛrio atual, informe os dados: ");
+		mensagens.MensagemSimples("Para adicionar uma Pe√ßa ao reposit√≥rio atual, informe os dados: ");
 		
-		mensagens.MensagemSimples("Nome da PeÁa: ");
+		mensagens.MensagemSimples("Nome da Pe√ßa: ");
 		String nome = sc.next();
 		
-		mensagens.MensagemSimples("DescriÁ„o da PeÁa: ");
+		mensagens.MensagemSimples("Descri√ß√£o da Pe√ßa: ");
 		String descricao = sc.next();
 
 		String codigo = UUID.randomUUID().toString();
 
-		mensagens.MensagemSimples("O cÛdigo da nova peÁa È: " + codigo);
+		mensagens.MensagemSimples("O c√≥digo da nova pe√ßa √©: " + codigo);
 
         return new Part(nome, codigo, descricao);
 	}
@@ -239,7 +239,7 @@ public class OperadorRepositorios
 
 			this.subcomponentesAtuais.add(new Subcomponente(pecaAtual, qtd));
 			
-			mensagens.MensagemSimples("A 'PeÁa atual' foi adicionada ‡ lista de 'Subcomponentes atuais' com sucesso!");
+			mensagens.MensagemSimples("A 'Pe√ßa atual' foi adicionada √† lista de 'Subcomponentes atuais' com sucesso!");
 		}
 		catch(Exception e){
 			mensagens.OperacaoNaoPodeSerRealizada();
