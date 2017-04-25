@@ -1,6 +1,6 @@
 package br.usp.sid.client;
 
-final class Comandos
+public final class Comandos
 {
 	public static final String VincularAoRepositorio = "bind";
 	public static final String listRepositories = "list";
