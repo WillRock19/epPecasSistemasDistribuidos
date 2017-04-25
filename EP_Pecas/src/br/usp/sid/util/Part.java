@@ -1,3 +1,5 @@
+package br.usp.sid.util;
+
 import java.util.List;
 
 public class Part

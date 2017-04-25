@@ -1,3 +1,7 @@
+package br.usp.sid.server;
+
+import br.usp.sid.util.Part;
+
 import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;

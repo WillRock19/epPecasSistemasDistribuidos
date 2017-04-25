@@ -1,5 +1,6 @@
+package br.usp.sid.util;
 
-public class Subcomponente 
+public class Subcomponente
 {	
 	public Part subPeca;
 	

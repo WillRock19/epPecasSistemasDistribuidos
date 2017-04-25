@@ -1,17 +1,30 @@
+package br.usp.sid.client;
+
+import br.usp.sid.server.PartRepository;
+import br.usp.sid.util.Part;
+import br.usp.sid.util.Subcomponente;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.Remote;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class OperadorRepositorios 
 {
 	private Part pecaAtual;
+
 	private List<Subcomponente> subcomponentesAtuais;
+
 	private PartRepository repositorioAtual;
-	private Registry RmiRegistry;
+
+	private Registry rmiRegistry;
+
 	private GeradorMensagens mensagens;
+
+	private String serverNameCurrent = null;
+
+
 	
 	public OperadorRepositorios()
 	{
@@ -29,6 +42,14 @@ public class OperadorRepositorios
             {
                 case Comandos.VincularAoRepositorio:
                     VincularAoRepositorio(parametro);
+                    break;
+
+                case Comandos.listRepositories:
+                    mensagens.ExibirRepositoriosExistentes(Cliente.host, ListarRepositoriosDoRmiRegistry());
+                    break;
+
+                case Comandos.currentRepository:
+                    mensagens.ExibirRepositoriosCorrente(Cliente.host, getServerNameCurrent());
                     break;
 
                 case Comandos.ListarPeca:
@@ -54,6 +75,10 @@ public class OperadorRepositorios
                 case Comandos.AddSubPeca:
             		AdicionarPecaAtualComoSubcomponenteAtual();
                     break;
+
+                case Comandos.help:
+                    mensagens.ExibirComandos();
+                    break;
                     
                 default:
                     mensagens.Erro("O comando informado não foi aceito pelo sistema.");
@@ -62,40 +87,47 @@ public class OperadorRepositorios
         }
 	}
 	
-	public void ConectarAoRmiRegistry(String host)
+	public boolean ConectarAoRmiRegistry(String host, int port)
 	{
-		try{
-			RmiRegistry = LocateRegistry.getRegistry(host);
+		try {
+
+			this.rmiRegistry = LocateRegistry.getRegistry(host, port);
+
+		} catch (Exception e) {
+            mensagens.Erro("Não foi possível se conectar ao RMI Registry. O seguinte erro ocorreu: \n" + e.getMessage() + "\r");
+            return false;
 		}
-		catch(Exception e) {
-            mensagens.Erro("Não foi possível se concetar ao RMI Registry especificado. O seguinte erro ocorreu: " + e.getMessage());
-		}
+
+		return true;
 	}
 	
 	public String[] ListarRepositoriosDoRmiRegistry()
 	{
 		try {
-			return RmiRegistry.list();	
+			return this.rmiRegistry.list();
 		} catch(Exception e) {
 			return new String[0];
 		}
 	}
+
+	public String getServerNameCurrent () {
+	    return this.serverNameCurrent;
+    }
 	
 	private void VincularAoRepositorio(String nomeRepositorio)
 	{
-		if (nomeRepositorio.equals("")) {
+	    this.serverNameCurrent = nomeRepositorio;
+		if (this.serverNameCurrent.equals("")) {
 			mensagens.Erro("Você precisa informar o nome do repositório desejado.");
 		} else {
 			try {
-			    Remote remoteAux = RmiRegistry.lookup(nomeRepositorio);
-                RmiRegistry.rebind(nomeRepositorio, remoteAux);
-                repositorioAtual = (PartRepository) remoteAux;
 
-//			    repositorioAtual = (PartRepository) RmiRegistry.lookup(nomeRepositorio);
+                this.repositorioAtual = (PartRepository) this.rmiRegistry.lookup(this.serverNameCurrent);
+
+                System.out.println(this.repositorioAtual.toString());
+
 				mensagens.MensagemSimples("Repositório vinculado com sucesso!");
 			} catch(Exception e) {
-                e.printStackTrace();
-//			    mensagens.Erro();
                 mensagens.OperacaoNaoPodeSerRealizada();
 			}
 		}

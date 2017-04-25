@@ -1,5 +1,10 @@
-import java.util.Collections;
+package br.usp.sid.client;
+
+import br.usp.sid.util.Part;
+import br.usp.sid.util.Subcomponente;
+
 import java.util.List;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class GeradorMensagens 
@@ -35,7 +40,10 @@ public class GeradorMensagens
 	public void ExibirComandos()
 	{
 		MensagemSimples("Os seguintes comandos sao validos: \r");
-		MensagemSimples("	bind  [RepositoryName] : Conecta com o outro servidor e conecta com o reposítorio especificado\r");
+		MensagemSimples("	bind  [RepositoryName] : Conecta com o outro servidor e seta o novo repositório corrente\r");
+        MensagemSimples("	list                   : Lista todos os repositórios disponíveis\r");
+        MensagemSimples("	current                : Mostra o nome do repositório corrente\r");
+
 		MensagemSimples("	listp                  : Lista todas as peças do repositório atual\r");
         MensagemSimples("	getp                   : Busca uma peça por código no repositório corrente e a seta como nova peça corrente\r");
         MensagemSimples("	showp                  : Mostra os atributos da peça corrente\r");
@@ -43,6 +51,7 @@ public class GeradorMensagens
         MensagemSimples("	addsubpart    [Number] : Adiciona [Number] unidades da peça corrente à lista de subpeças\r");
         MensagemSimples("	addp                   : \r");
         MensagemSimples("	quit                   : Encerra a aplicação do cliente\r");
+        MensagemSimples("	help                   : Mostra o menu de comandos disponíveis\r");
 	}
 	
 	public void ExibirRepositoriosExistentes(String host, String[] repositorios)
@@ -63,6 +72,17 @@ public class GeradorMensagens
 		}
 		MensagemSimples("----------------------------------------------------------------------");
 	}
+
+	public void ExibirRepositoriosCorrente (String host, String serverName) {
+
+        if (host == null && serverName != null) {
+            MensagemSimples("Você está conectado ao repositório '" + serverName + "'\r");
+        } else if (serverName != null) {
+            MensagemSimples("Você está conectado ao repositório '" + serverName + "' no RMI Service de host '" + host + "'\r");
+        } else {
+            MensagemSimples("Você não está conectado a nenhum repositório\r");
+        }
+    }
 	
 	public void ExibirPecasRepositorio(List<Part> pecas)
 	{
@@ -91,7 +111,7 @@ public class GeradorMensagens
 			for(Subcomponente subcomponente : peca.getSubcomponentes())
 			{
 				MensagemSimples(marker  + "Quantidade Subcomponentes: " + subcomponente.quantidadeSubpecas);
-				MensagemSimples(marker  + "Dados do Subcomponente: ");
+				MensagemSimples(marker  + "Dados do br.usp.sid.util.Subcomponente: ");
 				ExibirPecaNoNivel(subcomponente.subPeca, nivel + 1);
 			}
 		}
@@ -101,7 +121,7 @@ public class GeradorMensagens
 	{
 		try
 		{
-			MensagemSimples("Encerrando aplicação Cliente...");
+			MensagemSimples("Encerrando aplicação br.usp.sid.client.Cliente...");
 			TimeUnit.SECONDS.sleep(3);
 		}
 		catch(Exception e){
